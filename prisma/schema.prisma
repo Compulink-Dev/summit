@@ -3,18 +3,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// datasource db {
+//   provider = "postgresql"
+//   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+//   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+// }
+
 generator client {
   provider = "prisma-client-js"
-}
-
-model Post {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  slug     String    @unique
-  title    String
-  body     String
-  author   User      @relation(fields: [authorId], references: [id])
-  authorId String    @db.ObjectId
-  comments Comment[]
 }
 
 model User {
@@ -22,7 +18,23 @@ model User {
   email   String   @unique
   name    String?
   address Address?
-  posts   Post[]
+}
+
+model Vistors {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  email     String  @unique
+  name      String?
+  ticket_id String?
+}
+
+model Post {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  slug     String    @unique
+  title    String
+  body     String
+  // author   User      @relation(fields: [authorId], references: [id])
+  authorId String    @db.ObjectId
+  comments Comment[]
 }
 
 model Comment {
@@ -30,6 +42,72 @@ model Comment {
   comment String
   post    Post   @relation(fields: [postId], references: [id])
   postId  String @db.ObjectId
+}
+
+model Event {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  position    String
+  description String
+  imageUrl    String
+}
+
+model Attendee {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+}
+
+model Speaker {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  post        String
+  description String
+  imageUrl    String
+}
+
+model Sponsor {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String?
+  imageUrl String
+}
+
+model Sector {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+}
+
+model Pages {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  home     Home[]
+  about    About[]
+  events   Events[]
+  speakers Speakers[]
+  sponsors Sponsors[]
+}
+
+type Home {
+  title     String
+  paragraph String
+}
+
+type About {
+  title     String
+  paragraph String
+}
+
+type Events {
+  title     String
+  paragraph String
+}
+
+type Speakers {
+  title     String
+  paragraph String
+}
+
+type Sponsors {
+  title     String
+  paragraph String
 }
 
 // Address is an embedded document
