@@ -1,0 +1,15 @@
+.container {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.container:hover,
+.active {
+    background-color: #960796;
+    color: white;
+}
